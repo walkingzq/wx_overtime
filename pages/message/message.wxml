@@ -1,0 +1,7 @@
+<!--pages/message/message.wxml-->
+<view class='container'>
+  <text>{{message}}</text>
+</view>
+
+
+
