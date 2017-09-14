@@ -3,12 +3,14 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/form/form",
-    "pages/message/message"
+    "pages/message/message",
+    "pages/calendar/calendar",
+    "pages/detailShow/detailShow"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "加班信息统计",
     "navigationBarTextStyle": "black"
   }
 }

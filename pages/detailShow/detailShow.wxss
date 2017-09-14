@@ -1,4 +1,4 @@
-/* pages/form/form.wxss */
+/* pages/detailShow/detailShow.wxss */
 .itemView{
   margin-top: 10px;
   margin-left: 0px;
