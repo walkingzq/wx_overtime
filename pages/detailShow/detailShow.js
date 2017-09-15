@@ -121,11 +121,10 @@ Page({
   },
   //跳转js
   goToForm: function () {
-    wx.navigateTo({
-      url: '../form/form'
+    wx.redirectTo({
+      url: '../form/form',
     })
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

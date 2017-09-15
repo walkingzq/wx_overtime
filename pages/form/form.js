@@ -24,7 +24,7 @@ Page({
           console.log(date)
           console.log(formData)
           wx.request({
-            url: 'https://77205014.qcloud.la/form/formSubmitting',
+            url: 'https://77205014.qcloud.la/formReception-1.0-SNAPSHOT/formSubmitting',
             method: "POST",
             data: formData,
             header: {
