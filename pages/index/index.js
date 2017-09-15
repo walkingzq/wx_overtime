@@ -7,7 +7,8 @@ Page({
     // motto: '加班辛苦了， ',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    encryptedData:{}
   },
   //事件处理函数
   bindViewTap: function() {
@@ -27,7 +28,8 @@ Page({
       app.userInfoReadyCallback = res => {
         this.setData({
           userInfo: res.userInfo,
-          hasUserInfo: true
+          hasUserInfo: true,
+          encryptedData: JSON.stringify(res.encryptedData) 
         })
       }
     } else {

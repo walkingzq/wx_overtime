@@ -1,40 +1,17 @@
 <!--pages/detailShow/detailShow.wxml-->
 <view class='container'>
 <image class='image' style="background-color: #eeeeee;" mode="aspectFit" src="../../images/image.png"></image>
-  <form bindsubmit="formSubmit" bindreset="formReset">
-  <view class='itemView'>
-      <picker mode="date" name='date' value="{{date}}" start="2015-09-01" end="9999-09-01" bindchange="bindDateChange" disabled='true'>
-             <!-- <view class="input">     -->
-            加班日期: {{date}}
-             <!-- </view>        -->
-          <!-- <input class='input' name="name" placeholder="请输入姓名" /> -->
-      </picker>
-      </view>
-
-      <view class='itemView'>部门：
-      <input class='input' name="department" value='{{department}}' placeholder="请输入部门" disabled='true' />
-      </view>
-
-      <view class='itemView'>姓名：
-      <input class='input' name="name" value='{{name}}' placeholder="请输入姓名" maxlength='4' disabled='true'/>
-      </view>
-
-      <view class='itemView'>加班缘由：
-      <input class='input' name="reason" value='{{reason}}' placeholder="请输入加班缘由" maxlength='200' disabled='true'/>
-      </view>
-
-      <view class='itemView'>加班时长：
-      <input class='input' name="duration" value='{{duration}}' type='digit' placeholder="数字，单位：小时" disabled='true'/>
-      </view>
-
-      <view class='itemView'>加班地点：
-      <input class='input' name="place" value='{{place}}' placeholder="请输入加班地点" maxlength='200' disabled='true'/>
-      </view> 
+    <form>  
+      <text class='itemView'>加班日期：{{date}}</text>
+      <text class='itemView'>部门：{{department}}</text>
+      <text class='itemView'>姓名：{{name}}</text>
+      <text class='itemView'>加班缘由：{{reason}}</text>
+      <text class='itemView'>加班时长：{{duration}}小时</text>
+      <text class='itemView'>加班地点：{{place}}</text>
 
       <view class="button">
-        <button formType="submit" type='primary'>提交</button>
-        <button formType="reset">清空</button>
+        <button bindtap='goToForm' type='primary'>修改</button>
       </view>
-  </form>
+    </form>  
 </view>
 

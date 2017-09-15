@@ -12,8 +12,8 @@ const conf = {
     const cur_year = date.getFullYear();
     const cur_month = date.getMonth() + 1;
     const weeks_ch = ['日', '一', '二', '三', '四', '五', '六'];
-    this.calculateEmptyGrids(cur_year, cur_month);
-    this.calculateDays(cur_year, cur_month);
+    this.calculateEmptyGrids(cur_year, cur_month);//设置不显示的上个月天数
+    this.calculateDays(cur_year, cur_month);//设置本月哪些日期有值
     this.setData({
       cur_year,
       cur_month,
@@ -26,6 +26,7 @@ const conf = {
   getFirstDayOfWeek(year, month) {
     return new Date(Date.UTC(year, month - 1, 1)).getDay();
   },
+  //显示在当前页面的上月天数
   calculateEmptyGrids(year, month) {
     const firstDayOfWeek = this.getFirstDayOfWeek(year, month);
     let empytGrids = [];
@@ -44,21 +45,46 @@ const conf = {
       });
     }
   },
-  //计算具体某年某月的天数
+  //设置本月天数的有值状态
   calculateDays(year, month) {
     let days = [];
-
+    
     const thisMonthDays = this.getThisMonthDays(year, month);
-
+    
     for (let i = 1; i <= thisMonthDays; i++) {
-      days.push({
-        day: i,
-        choosed: false
-      });
+      //组装本地缓存key值
+      // 如果日期为1-9日，则在日期前加一个0
+      if(i<10){
+        var d = "0" + i;
+      }else{
+        d = i
+      }
+      // 如果月份为1-9月，则在月份前加一个0并组装key值
+      var key = year + '-' + month + '-' + d;
+      if (parseInt(month) < 10) {
+        key = year + '-0' + month + '-' + d;
+      }
+
+      //查询本地缓存，若有值，则将该日期的choosed设定为true；否则，设为false
+      try{
+        var value = wx.getStorageSync(key);
+        console.log(value);
+        if (value) {
+          console.log("success" + key)
+          days.push({
+            day: i,
+            choosed: true
+          });
+        } else {
+          days.push({
+            day: i,
+            choosed: false
+          });
+        }
+      }catch(e){
+        console.error("获取本地缓存出错：" + e)
+      }
     }
-    const date = new Date();
-    var d = date.getDate();
-    days[parseInt(d) - 1].choosed = true;
 
     this.setData({
       days
@@ -106,10 +132,17 @@ const conf = {
     const idx = e.currentTarget.dataset.idx;
     const days = this.data.days;
 
+
+    // 如果日期为1-9日，则在日期前加一个0
+    var d = parseInt(idx) + 1;
+    if (d < 10) {
+      var d = "0" + d;
+    }
+
     //如果月份为1-9月，则在月份前加一个0
-    var value = this.data.cur_year + '-' + this.data.cur_month + '-' + (parseInt(idx) + 1);
+    var value = this.data.cur_year + '-' + this.data.cur_month + '-' + d;
     if (parseInt(this.data.cur_month) < 10) {
-      value = this.data.cur_year + '-0' + this.data.cur_month + '-' + (parseInt(idx) + 1)
+      value = this.data.cur_year + '-0' + this.data.cur_month + '-' + d;
     }
 
     if(days[idx].choosed){

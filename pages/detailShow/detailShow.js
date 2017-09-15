@@ -103,24 +103,26 @@ Page({
     this.setData({
       date: options.date
     })
-    //根据日期从本地缓存中读取信息，若有信息，设定个输入框内容；若没有，则跳转至加班信息提交界面。
+    var that = this;
+    //根据日期从本地缓存中读取信息，若有信息，设定各个输入框内容；若没有，则跳转至加班信息提交界面。
     var data_day = wx.getStorage({
       key: options.date,
       success: function (res) {
-        this.setData({
-          date: JSON.parse(res).date,
-          department: JSON.parse(res).department,
-          name: JSON.parse(res).name,
-          reason: JSON.parse(res).reason,
-          duration: JSON.parse(res).duration,
-          place: JSON.parse(res).place
+        that.setData({
+          date: JSON.parse(res.data).date,
+          department: JSON.parse(res.data).department,
+          name: JSON.parse(res.data).name,
+          reason: JSON.parse(res.data).reason,
+          duration: JSON.parse(res.data).duration,
+          place: JSON.parse(res.data).place
         })
       },
-      // fail: function (res) {
-      //   wx.navigateTo({
-      //     url: '../form/form?date=' + options.date,
-      //   })
-      // }
+    })
+  },
+  //跳转js
+  goToForm: function () {
+    wx.navigateTo({
+      url: '../form/form'
     })
   },
 

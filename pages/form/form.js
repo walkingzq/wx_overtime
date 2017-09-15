@@ -10,14 +10,19 @@ Page({
   formSubmit: function (e) {
     var that = this;
     console.log('form发生了submit事件，携带数据为：', e.detail.value)
+    // var date = that.data.date;
+    // console.log(this.data.date)
     wx.showModal({
       title: '提示',
       content: '确认要提交吗？',
       success: function (res) {
         if (res.confirm) {
           console.log('用户点击确定')
-          // var that = this;
+          //获取formData和date
           var formData = e.detail.value;
+          var date = formData.date;
+          console.log(date)
+          console.log(formData)
           wx.request({
             url: 'https://77205014.qcloud.la/form/formSubmitting',
             method: "POST",
@@ -28,10 +33,17 @@ Page({
             success: function (res) {
               console.log(res.data)
               if(res.data == "0"){
-                //提交成功后将本条记录存入本地缓存，key值为该记录日期（一个日期只有一条记录）
+                //提交成功后将本条记录的JSON格式存入本地缓存，key值为该记录日期（一个日期只有一条记录）
               wx.setStorage({
-                key: that.data.date,
-                data: formData,
+                key: date,
+                data: JSON.stringify(formData),
+              })
+
+              wx.getStorage({
+                key: date,
+                success: function(res) {
+                  console.log("已存入缓存，\"" + date + "\":\"" + JSON.stringify(res.data) + "\"")
+                },
               })
               //显示“提交成功”消息
               wx.showToast({
@@ -103,7 +115,7 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
-      date:options.date
+      date: options.date || util.formatTime(new Date())
     })
   },
 
