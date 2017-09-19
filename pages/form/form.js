@@ -52,7 +52,7 @@ Page({
                 duration: 2000
               })
               //跳转至日历页面
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '../calendar/calendar?date=' + that.data.date
               })
               }else if(res.data == "-1"){
@@ -65,7 +65,7 @@ Page({
                 })
               } else if (res.data == "-3") {
                 wx.navigateTo({
-                  url: '../message/message?message=姓名填写有误，请检查后重新提交' + JSON.stringify(formData)
+                  url: '../message/message?message=姓名填写有误，请检查后重新提交'
                 })
               } else if (res.data == "-4") {
                 wx.navigateTo({

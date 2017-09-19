@@ -150,7 +150,7 @@ const conf = {
           url: '../detailShow/detailShow?date=' + value,
         })
     }else{
-      wx.navigateTo({
+      wx.redirectTo({
         url: '../form/form?date=' + value,
       })
     }

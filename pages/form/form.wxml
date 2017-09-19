@@ -16,7 +16,7 @@
       </view>
 
       <view class='itemView'>姓名：
-      <input class='input' name="name" value='赵庆' placeholder="请输入姓名" maxlength='4'/>
+      <input class='input' name="name" value='' placeholder="请输入姓名" maxlength='4'/>
       </view>
 
       <view class='itemView'>加班缘由：
