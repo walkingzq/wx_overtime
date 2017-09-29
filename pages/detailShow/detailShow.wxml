@@ -4,9 +4,9 @@
     <form>  
       <text class='itemView'>加班日期：{{date}}</text>
       <text class='itemView'>部门：{{department}}</text>
-      <text class='itemView'>姓名：{{name}}</text>
+      <text class='itemView'>姓名：{{names[nameIndex]}}</text>
       <text class='itemView'>加班缘由：{{reason}}</text>
-      <text class='itemView'>加班时长：{{duration}}小时</text>
+      <text class='itemView'>加班时长：{{durations[durationIndex]}}h</text>
       <text class='itemView'>加班地点：{{place}}</text>
 
       <view class="button">

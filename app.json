@@ -11,5 +11,20 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "加班信息统计",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color":"#888888",
+    "selectedColor": "#44ffff",
+    "borderStyle": "#ccc",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath":"pages/calendar/calendar",
+        "text":"我的"
+      }
+    ]
   }
 }

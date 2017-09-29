@@ -7,10 +7,15 @@ Page({
   data: {
     date:null,
     department:null,
-    name:null,
+    nameIndex:null,
     reason:null,
     duration:null,
-    place:null
+    place:null,
+    names: ['陈越', '沈旻雁', '李成钢', '冯祥', '张延', '李新龙', '叶鑫', '卜理超', '贾娟', '张也', '陈蔚', '冯金荣',
+      '陈婧', '杨志', '葛文君', '王鹏', '丁鑫同', '李旭春', '袁雅迪', '张少昆', '段征', '杭欢', '李铮', '田曦阳', '丁钊'],
+    durations: ['0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5',
+      '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '11', '12', '12.5', '13', '13.5', '14', '14.5', '15', '15.5', '16', '16.5', '17', '17.5', '18', '18.5', '19', '19.5', '20', '20.5', '21', '21.5', '22', '23', '23.5'],
+    durationIndex: 4,
   },
 
   /**
@@ -29,18 +34,23 @@ Page({
         that.setData({
           date: JSON.parse(res.data).date,
           department: JSON.parse(res.data).department,
-          name: JSON.parse(res.data).name,
+          nameIndex: JSON.parse(res.data).name,
           reason: JSON.parse(res.data).reason,
-          duration: JSON.parse(res.data).duration,
+          durationIndex: JSON.parse(res.data).duration,
           place: JSON.parse(res.data).place
         })
       },
     })
   },
-  //跳转js
+  //跳转到表单提交页面
   goToForm: function () {
-    wx.redirectTo({
-      url: '../form/form?date=' + this.data.date,
+    wx.navigateTo({
+      url: '../form/form?date=' + this.data.date 
+      + "&department=" + this.data.department
+      + '&nameIndex=' + this.data.nameIndex
+      + "&reason=" + this.data.reason
+      + "&durationIndex=" + this.data.durationIndex 
+      + "&date=" + this.data.date ,
     })
   },
   /**

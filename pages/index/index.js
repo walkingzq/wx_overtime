@@ -10,7 +10,7 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     encryptedData:{}
   },
-  //事件处理函数
+  // 事件处理函数
   bindViewTap: function() {
     wx.redirectTo({
       url: '../calendar/calendar'
@@ -54,9 +54,9 @@ Page({
     })
   },
   //跳转js
-  goToForm: function () {
-    wx.navigateTo({
-      url: '../form/form'
-    })
-  }
+  // goToForm: function () {
+  //   wx.navigateTo({
+  //     url: '../form/form'
+  //   })
+  // }
 })

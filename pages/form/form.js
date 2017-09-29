@@ -1,10 +1,50 @@
 // pages/form/form.js
 var util = require('../../utils/util.js');
 Page({
+  /**
+  * 页面的初始数据
+  */
+  data: {
+    date: util.formatTime(new Date()),
+    department:'产品研发中心二部',
+    names: ['陈越', '沈旻雁', '李成钢', '冯祥', '张延', '李新龙', '叶鑫', '卜理超', '贾娟', '张也', '陈蔚', '冯金荣', 
+            '陈婧', '杨志', '葛文君', '王鹏', '丁鑫同', '李旭春', '袁雅迪', '张少昆', '段征', '杭欢', '李铮', '田曦阳', '丁钊'],
+    index: 0,
+    reason:'',
+    durations:['0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5',
+    '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '11', '12', '12.5', '13', '13.5', '14', '14.5', '15', '15.5', '16', '16.5', '17', '17.5', '18', '18.5', '19', '19.5', '20', '20.5', '21', '21.5', '22', '23', '23.5'],
+    durationIndex:4,
+    place:'公司',
+  //   items: [
+  //     { name: 'USA', value: '美国' },
+  //     { name: 'CHN', value: '中国', checked: 'true' },
+  //     { name: 'BRA', value: '巴西' },
+  //     { name: 'JPN', value: '日本' },
+  //     { name: 'ENG', value: '英国' },
+  //     { name: 'TUR', value: '法国' },
+  //   ]
+  // },
+  // checkboxChange: function (e) {
+  //   console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+  },
+  //加班日期
   bindDateChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       date: e.detail.value
+    })
+  },
+  //姓名
+  bindNameChange:function(e){
+    console.log('name changes,name is ', this.data.names[e.detail.value])
+    this.setData({
+      index:e.detail.value
+    })
+  },
+  //加班时长
+  bindDurationChange:function(e){
+    this.setData({
+      durationIndex:e.detail.value
     })
   },
   formSubmit: function (e) {
@@ -33,17 +73,20 @@ Page({
             success: function (res) {
               console.log(res.data)
               if(res.data == "0"){
-                //提交成功后将本条记录的JSON格式存入本地缓存，key值为该记录日期（一个日期只有一条记录）
-              wx.setStorage({
-                key: date,
-                data: JSON.stringify(formData),
-              })
-
+                //提交成功后将本条记录的JSON格式存入本地缓存，key值为该记录日期（一个日期只有一条记录） 
+              wx.setStorageSync(date, JSON.stringify(formData))
+              // ({
+              //   key: date,
+              //   data: JSON.stringify(formData),
+              // })
               wx.getStorage({
                 key: date,
                 success: function(res) {
                   console.log("已存入缓存，\"" + date + "\":\"" + JSON.stringify(res.data) + "\"")
                 },
+                fail:function(res){
+                  console.log("取缓存失败" + res.data) 
+                }
               })
               //显示“提交成功”消息
               wx.showToast({
@@ -51,9 +94,9 @@ Page({
                 icon: 'success',
                 duration: 2000
               })
-              //跳转至日历页面
-              wx.redirectTo({
-                url: '../calendar/calendar?date=' + that.data.date
+              //关闭非tabBar页面并跳转至日历tabBar页面
+              wx.switchTab({
+                url: '../calendar/calendar'
               })
               }else if(res.data == "-1"){
                 wx.navigateTo({
@@ -100,22 +143,21 @@ Page({
   formReset: function () {
     console.log('form发生了reset事件')
     this.setData({
-      date: util.formatTime(new Date())
+      date: util.formatTime(new Date()),
+      index:0
     })
   },
-  /**
-   * 页面的初始数据
-   */
-  data: {
-    date: util.formatTime(new Date())
-  },
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     this.setData({
-      date: options.date || util.formatTime(new Date())
+      date: options.date || util.formatTime(new Date()),
+      index:options.nameIndex || 0,
+      department:options.department || '产品研发中心二部',
+      durationIndex:options.durationIndex || 4,
+      reason:options.reason || '',
+      place:options.place || '公司'
     })
   },
 

@@ -7,7 +7,7 @@ const conf = {
     hasEmptyGrid: false,
     showPicker: false
   },
-  onLoad() {
+  onShow:function() {
     const date = new Date();
     const cur_year = date.getFullYear();
     const cur_month = date.getMonth() + 1;
@@ -150,7 +150,7 @@ const conf = {
           url: '../detailShow/detailShow?date=' + value,
         })
     }else{
-      wx.redirectTo({
+      wx.navigateTo({
         url: '../form/form?date=' + value,
       })
     }

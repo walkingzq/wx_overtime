@@ -12,24 +12,42 @@
       </view>
 
       <view class='itemView'>部门：
-      <input class='input' name="department" value='产品研发中心二部' placeholder="请输入部门"/>
+      <input class='input' name="department" value='{{department}}' placeholder="请输入部门"/>
       </view>
 
-      <view class='itemView'>姓名：
+      <!-- <view class='itemView'>姓名：
       <input class='input' name="name" value='' placeholder="请输入姓名" maxlength='4'/>
+      </view> -->
+
+      <view class='itemView'>
+        <picker bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
+          <view class="picker">
+            姓名：{{names[index]}}
+          </view>
+        </picker>
       </view>
 
       <view class='itemView'>加班缘由：
-      <input class='input' name="reason" placeholder="请输入加班缘由" maxlength='200'/>
+      <input class='input' name="reason" placeholder="请输入加班缘由" value="{{reason}}" maxlength='200'/>
       </view>
 
-      <view class='itemView'>加班时长：
-      <input class='input' name="duration" value='2' type='digit' placeholder="数字，单位：小时"/>
+      <view class='itemView'>
+        <picker bindchange="bindDurationChange" name="duration" value="{{durationIndex}}" range="{{durations}}">
+          <view class="picker">
+            加班时长：{{durations[durationIndex]}}h
+          </view>
+        </picker>
       </view>
 
       <view class='itemView'>加班地点：
-      <input class='input' name="place" value='公司' placeholder="请输入加班地点" maxlength='200'/>
+      <input class='input' name="place" value='{{place}}' placeholder="请输入加班地点" maxlength='200'/>
       </view> 
+
+      <!-- <checkbox-group bindchange="checkboxChange">
+        <label class="checkbox" wx:for="{{items}}">
+          <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+        </label>
+      </checkbox-group> -->
 
       <view class="button">
         <button formType="submit" type='primary'>提交</button>

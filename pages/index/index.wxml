@@ -10,8 +10,8 @@
   </view>
 
 <!--跳转至form页面-->
-  <view class="button">
+  <!-- <view class="button">
     <button bindtap='goToForm' type='primary'>提交加班信息</button>
-  </view>
+  </view> -->
   
 </view>
