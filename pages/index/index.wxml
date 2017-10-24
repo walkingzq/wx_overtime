@@ -5,7 +5,8 @@
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 点击授权 </button>
     <block wx:else>
        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image> 
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+        <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text>   -->
+       <text class="userinfo-nickname">{{openId}}</text> 
     </block>
   </view>
 

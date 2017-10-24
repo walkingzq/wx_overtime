@@ -13,7 +13,7 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color":"#888888",
+    "color": "#888888",
     "selectedColor": "#44ffff",
     "borderStyle": "#ccc",
     "list": [
@@ -22,8 +22,8 @@
         "text": "首页"
       },
       {
-        "pagePath":"pages/calendar/calendar",
-        "text":"我的"
+        "pagePath": "pages/calendar/calendar",
+        "text": "我的"
       }
     ]
   }
