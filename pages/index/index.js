@@ -51,6 +51,13 @@ Page({
       })
     }
   },
+  onShareAppMessage() {
+    return {
+      title: 'CTSI加班助手',
+      desc: '加班信息统计',
+      path: 'pages/index/index'
+    };
+  },
   getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo

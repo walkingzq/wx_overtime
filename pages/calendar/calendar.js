@@ -201,8 +201,8 @@ const conf = {
   },
   onShareAppMessage() {
     return {
-      title: '小程序日历',
-      desc: '还是新鲜的日历哟',
+      title: 'CTSI加班助手',
+      desc: '加班信息统计',
       path: 'pages/index/index'
     };
   }

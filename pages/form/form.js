@@ -5,6 +5,7 @@ Page({
   * 页面的初始数据
   */
   data: {
+    sessionKey:null,
     date: util.formatTime(new Date()),
     department:'产品研发中心二部',
     names: ['陈越', '沈旻雁', '李成钢', '冯祥', '张延', '李新龙', '叶鑫', '卜理超', '贾娟', '张也', '陈蔚', '冯金荣', 
@@ -63,12 +64,15 @@ Page({
           var date = formData.date;
           console.log(date)
           console.log(formData)
+          console.log("sessionKey in form page:")
+          console.log(that.data.sessionKey)
           wx.request({
-            url: 'https://77205014.qcloud.la/formReception-1.0-SNAPSHOT/formSubmitting',
+            url: 'https://77205014.qcloud.la/zhaoqing/formSubmitting',
             method: "POST",
             data: formData,
             header: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Session-Key':that.data.sessionKey
             },
             success: function (res) {
               console.log(res.data)
@@ -151,13 +155,51 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+    wx.checkSession({
+      //登录态未过期，则直接从本地缓存中读取sessionKey
+      success:res => {
+        this.setData({
+          sessionKey: wx.getStorageSync("sessionKey")
+        })
+        console.log("sessionKey in form page 已存入")
+        console.log(this.data.sessionKey)
+      },
+      //登录态过期，则重新登录获取sessionKey
+      fail:res=>{
+        wx.login({
+          success: res => {
+            if (res.code) {
+              console.log(res)
+              //发起网络请求
+              wx.request({
+                url: 'https://77205014.qcloud.la/zhaoqing/onLogin',
+                method: "POST",
+                data: {
+                  code: res.code
+                },
+                success: res => {
+                  console.log(res.data)
+                  this.globalData.sessionKey = res.data
+                  wx.setStorageSync("sessionKey", res.data)
+                  console.log("sessionKey: " + res.data + " 已存入本地缓存")
+                }
+              })
+            } else {
+              console.log('获取用户登录态失败！' + res.errMsg)
+            }
+          }
+        })
+      }
+    })
+
     this.setData({
       date: options.date || util.formatTime(new Date()),
       index:options.nameIndex || 0,
       department:options.department || '产品研发中心二部',
       durationIndex:options.durationIndex || 4,
       reason:options.reason || '',
-      place:options.place || '公司'
+      place:options.place || '公司',
     })
   },
 
