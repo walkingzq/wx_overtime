@@ -1,5 +1,7 @@
 //app.js
 //小程序的脚本代码。我们可以在这个文件中监听并处理小程序的生命周期函数、声明全局变量。
+// var getUserName = require('./utils/getUserName.js');
+import {getUserName} from './utils/getUserName.js';
 App({
   onLaunch: function () {//当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
     // 展示本地存储能力
@@ -14,7 +16,7 @@ App({
           console.log(res)
           //发起网络请求
           wx.request({
-            url: 'https://77205014.qcloud.la/zhaoqing/onLogin',
+            url: 'https://77205014.qcloud.la/zhaoqing1026/onLogin',
             method: "POST",
             data: {
               code: res.code
@@ -22,6 +24,10 @@ App({
             success:res => {
               console.log(res.data)
               this.globalData.sessionKey = res.data
+
+              this.globalData.userName = getUserName(this.globalData.sessionKey)
+              console.log("app.js" + this.globalData.userName)
+
               wx.setStorageSync('sessionKey', this.globalData.sessionKey)
               console.log("sessionKey: " + this.globalData.sessionKey + " 已存入本地缓存")
 
@@ -82,5 +88,6 @@ App({
   globalData: {
     userInfo: null,
     sessionKey:null,
+    userName:""
   }
 })

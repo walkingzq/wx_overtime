@@ -4,9 +4,19 @@
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 点击授权 </button>
     <block wx:else>
-       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image> 
-          <text class="userinfo-nickname">{{userInfo.nickName}}</text>    
+       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+       <!-- <button wx:if="{{!hasUserName}}" bindtap='setName'>姓名绑定</button> -->
+       <picker wx:if="{{!hasUserName}}" bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
+          <view class="picker">
+            请绑定姓名：{{names[index]}}
+          </view>
+        </picker>
+       <text wx:else>{{userName}}</text> 
+          <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text>     -->
     </block>
+  </view>
+  <view>
+    
   </view>
 
 <!--跳转至form页面-->
