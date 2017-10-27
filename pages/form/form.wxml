@@ -15,17 +15,17 @@
       <input class='input' name="department" value='{{department}}' placeholder="请输入部门"/>
       </view>
 
-      <!-- <view class='itemView'>姓名：
-      <input class='input' name="name" value='' placeholder="请输入姓名" maxlength='4'/>
-      </view> -->
+      <view class='itemView'>姓名：
+      <input class='input' name="name" value='{{userName}}' disabled='true'/>
+      </view> 
 
-      <view class='itemView'>
+      <!-- <view class='itemView'>
         <picker bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
           <view class="picker">
             姓名：{{names[index]}}
           </view>
         </picker>
-      </view>
+      </view> -->
 
       <view class='itemView'>加班缘由：
       <input class='input' name="reason" placeholder="请输入加班缘由" value="{{reason}}" maxlength='200'/>

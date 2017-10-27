@@ -6,14 +6,15 @@
     <block wx:else>
        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
        <!-- <button wx:if="{{!hasUserName}}" bindtap='setName'>姓名绑定</button> -->
-       <picker wx:if="{{!hasUserName}}" bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
+        
+          <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text>     -->
+    </block>
+    <picker wx:if="{{!hasUserName}}" bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
           <view class="picker">
             请绑定姓名：{{names[index]}}
           </view>
         </picker>
-       <text wx:else>{{userName}}</text> 
-          <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text>     -->
-    </block>
+       <text wx:else>{{userName}}</text>
   </view>
   <view>
     

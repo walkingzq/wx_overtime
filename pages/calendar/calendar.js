@@ -1,13 +1,20 @@
 // pages/calendar/calendar.js
+import { getUserName } from '../../utils/getUserName.js';
 'use strict';
+const app = getApp()//获取app实例
+
 let choose_year = null,
 choose_month = null;
 const conf = {
   data: {
     hasEmptyGrid: false,
-    showPicker: false
+    showPicker: false,
+    hasUserName:false,//是否绑定姓名
+    userName:null,
+    // userName: getUserName(),
   },
   onShow:function() {
+    this.setHasUserName();//设定hasUserName变量
     const date = new Date();
     const cur_year = date.getFullYear();
     const cur_month = date.getMonth() + 1;
@@ -25,6 +32,30 @@ const conf = {
   },
   getFirstDayOfWeek(year, month) {
     return new Date(Date.UTC(year, month - 1, 1)).getDay();
+  },
+  //设置hasName变量
+  setHasUserName(){
+    console.log("calendar.js1:" + this.data.userName)
+    if (this.data.userName != null) {
+      this.setData({
+        hasUserName: true
+      })
+    }
+
+    // console.log("calendar.js1:" + wx.getStorageSync('userName'))
+    // if (wx.getStorageSync('userName')) {
+    //   this.setData({
+    //     userName: wx.getStorageSync('userName'),
+    //     hasUserName: true
+    //   })
+    //   console.log("calendar.js2" + wx.getStorageSync('userName'))
+    // } else if (null != getUserName(wx.getStorageSync('sessionKey'))) {
+    //   console.log("calendar.js" + " else if")
+    //   this.setData({
+    //     userName: getUserName(wx.getStorageSync('sessionKey')),
+    //     hasUserName: true
+    //   })
+    // }
   },
   //显示在当前页面的上月天数
   calculateEmptyGrids(year, month) {
@@ -146,19 +177,48 @@ const conf = {
     }
 
     if(days[idx].choosed){
+      if(this.data.hasUserName){
         wx.navigateTo({
-          url: '../detailShow/detailShow?date=' + value,
+          url: '../detailShow/detailShow?date=' + value + "&userName=" + this.data.userName,
         })
+      }else{
+        wx.showModal({
+          title: '提示',
+          content: '您还没有绑定姓名，请先在首页绑定姓名后再提交加班信息',
+          showCancel:false,
+          //点击确认按钮跳转至主页
+          success:res=>{
+            wx.switchTab({
+              url: '../index/index',
+            })
+          },
+          fail:res=>{
+            console.log("calendar.js模态窗口出错")
+          }
+        })
+      }
     }else{
-      wx.navigateTo({
-        url: '../form/form?date=' + value,
-      })
+      if(this.data.hasUserName){
+        wx.navigateTo({
+          url: '../form/form?date=' + value + "&userName=" + this.data.userName,
+        })
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '您还没有绑定姓名，请先在首页绑定姓名后再提交加班信息',
+          showCancel: false,
+          //点击确认按钮跳转至主页
+          success: res => {
+            wx.switchTab({
+              url: '../index/index',
+            })
+          },
+          fail: res => {
+            console.log("calendar.js模态窗口出错")
+          }
+        })
+      }
     }
-    
-    // days[idx].choosed = !days[idx].choosed;//设置日期的选中情况
-    // this.setData({
-    //   days,
-    // });
   },
   chooseYearAndMonth() {
     const cur_year = this.data.cur_year;

@@ -10,6 +10,7 @@ Page({
     department:'产品研发中心二部',
     names: ['陈越', '沈旻雁', '李成钢', '冯祥', '张延', '李新龙', '叶鑫', '卜理超', '贾娟', '张也', '陈蔚', '冯金荣', 
             '陈婧', '杨志', '葛文君', '王鹏', '丁鑫同', '李旭春', '袁雅迪', '张少昆', '段征', '杭欢', '李铮', '田曦阳', '丁钊'],
+    userName:null,
     index: 0,
     reason:'',
     durations:['0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5',
@@ -67,7 +68,7 @@ Page({
           console.log("sessionKey in form page:")
           console.log(that.data.sessionKey)
           wx.request({
-            url: 'https://77205014.qcloud.la/zhaoqing/formSubmitting',
+            url: 'https://77205014.qcloud.la/zhaoqing1026/formSubmitting',
             method: "POST",
             data: formData,
             header: {
@@ -173,7 +174,7 @@ Page({
               console.log(res)
               //发起网络请求
               wx.request({
-                url: 'https://77205014.qcloud.la/zhaoqing/onLogin',
+                url: 'https://77205014.qcloud.la/zhaoqing1026/onLogin',
                 method: "POST",
                 data: {
                   code: res.code
@@ -196,6 +197,7 @@ Page({
     this.setData({
       date: options.date || util.formatTime(new Date()),
       index:options.nameIndex || 0,
+      userName:options.userName,//姓名
       department:options.department || '产品研发中心二部',
       durationIndex:options.durationIndex || 4,
       reason:options.reason || '',

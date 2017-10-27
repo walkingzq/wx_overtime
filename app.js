@@ -23,19 +23,14 @@ App({
             },
             success:res => {
               console.log(res.data)
-              this.globalData.sessionKey = res.data
-
-              this.globalData.userName = getUserName(this.globalData.sessionKey)
-              console.log("app.js" + this.globalData.userName)
-
-              wx.setStorageSync('sessionKey', this.globalData.sessionKey)
-              console.log("sessionKey: " + this.globalData.sessionKey + " 已存入本地缓存")
-
-              var value = wx.getStorageSync('sessionKey')
-              if(value){
-                console.log("wx.getStorageSync('sessionKey'):" + value)
+              if(res.statusCode == 200){
+                // this.globalData.sessionKey = res.data
+                wx.setStorageSync('sessionKey', res.data)
+                console.log("sessionKey: " + res.data + " 已存入本地缓存")
               }
-              
+              //获取绑定的姓名信息
+              // this.globalData.userName = getUserName(this.globalData.sessionKey)
+              // console.log("app.js" + this.globalData.userName)
             }
           })
         } else {

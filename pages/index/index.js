@@ -12,7 +12,8 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     encryptedData:{},
     hasUserName:false,//姓名是否绑定标志
-    userName: null
+    // userName: null
+    userName:getUserName(),
   },
   // 事件处理函数
   bindViewTap: function() {
@@ -21,7 +22,6 @@ Page({
     })
   },
   onLoad: function () {
-    console.log("index.js0:" + app.globalData.userName)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -49,21 +49,6 @@ Page({
         }
       })
     }
-    //获取用户真实姓名
-    console.log("index.js1:" + app.globalData.userName)
-    if(app.globalData.userName){
-      this.setData({
-        userName:app.globalData.userName,
-        hasUserName:true
-      })
-      console.log("index.js" + app.globalData.userName)
-    }else if(null != getUserName(app.globalData.sessionKey)){
-      console.log("index.js" + "else if")
-      this.setData({
-        userName: getUserName(app.globalData.sessionKey),
-        hasUserName: true
-      })
-    }
   },
   getUserInfo: function(e) {
     console.log(e)
@@ -71,12 +56,6 @@ Page({
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
-    })
-  },
-  //绑定姓名按钮的js代码
-  setName:function(){
-    wx.showToast({
-      title: '绑定姓名按钮',
     })
   },
   //姓名
@@ -101,6 +80,10 @@ Page({
               title: '绑定成功',
               icon:'success'
             })
+            this.setData({
+              hasUserName:true,
+              userName: this.data.names[e.detail.value],
+            })
           }else{
             console.log("系统异常")
           }
@@ -112,6 +95,23 @@ Page({
         console.log("网络异常")
       }
     })
+  },
+  onShow(){
+    //获取用户真实姓名
+    console.log("index.js1:" + this.data.userName)
+    // if (this.data.userName != null){
+    //   console.log("获取姓名成功")
+    //   this.setData({
+    //     hasUserName: true
+    //   })
+    // }
+
+    if (getUserName() != null){
+      this.setData({
+        userName:getUserName(),
+        hasUserName: true
+      })
+    }
   },
   onShareAppMessage() {
     return {
