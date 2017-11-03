@@ -11,6 +11,7 @@ Page({
     reason:null,
     duration:null,
     place:null,
+    name:null,
     names: ['陈越', '沈旻雁', '李成钢', '冯祥', '张延', '李新龙', '叶鑫', '卜理超', '贾娟', '张也', '陈蔚', '冯金荣',
       '陈婧', '杨志', '葛文君', '王鹏', '丁鑫同', '李旭春', '袁雅迪', '张少昆', '段征', '杭欢', '李铮', '田曦阳', '丁钊'],
     durations: ['0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5',
@@ -34,7 +35,8 @@ Page({
         that.setData({
           date: JSON.parse(res.data).date,
           department: JSON.parse(res.data).department,
-          nameIndex: JSON.parse(res.data).name,
+          // nameIndex: JSON.parse(res.data).name,
+          name: JSON.parse(res.data).name,
           reason: JSON.parse(res.data).reason,
           durationIndex: JSON.parse(res.data).duration,
           place: JSON.parse(res.data).place
@@ -47,7 +49,7 @@ Page({
     wx.navigateTo({
       url: '../form/form?date=' + this.data.date 
       + "&department=" + this.data.department
-      + '&nameIndex=' + this.data.nameIndex
+      + '&userName' + this.data.name
       + "&reason=" + this.data.reason
       + "&durationIndex=" + this.data.durationIndex 
       + "&date=" + this.data.date ,

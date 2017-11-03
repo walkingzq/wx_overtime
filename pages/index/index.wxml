@@ -14,7 +14,8 @@
             请绑定姓名：{{names[index]}}
           </view>
         </picker>
-       <text wx:else>{{userName}}</text>
+       <!-- <text wx:else>{{userName}}</text> -->
+       <picker wx:else bindchange='bindNameModify' value='{{index}}' range='{{names}}'>{{userName}}</picker>
   </view>
   <view>
     

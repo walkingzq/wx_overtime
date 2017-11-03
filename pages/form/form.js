@@ -68,7 +68,7 @@ Page({
           console.log("sessionKey in form page:")
           console.log(that.data.sessionKey)
           wx.request({
-            url: 'https://77205014.qcloud.la/zhaoqing1026/formSubmitting',
+            url: 'https://77205014.qcloud.la/form-1.0.3/formSubmitting',
             method: "POST",
             data: formData,
             header: {
@@ -104,38 +104,60 @@ Page({
                 url: '../calendar/calendar'
               })
               }else if(res.data == "-1"){
-                wx.navigateTo({
-                  url: '../message/message?message=部门填写有误，请检查后重新提交'
+                wx.showModal({
+                  title: '提示',
+                  content: '部门填写有误，请检查后重新提交',
+                  showCancel: false,
                 })
               } else if (res.data == "-2") {
-                wx.navigateTo({
-                  url: '../message/message?message=日期填写有误，请检查后重新提交'
+                wx.showModal({
+                  title: '提示',
+                  content: '加班日期填写有误，请检查后重新提交',
+                  showCancel: false,
                 })
               } else if (res.data == "-3") {
-                wx.navigateTo({
-                  url: '../message/message?message=姓名填写有误，请检查后重新提交'
+                wx.showModal({
+                  title: '提示',
+                  content: '姓名填写有误，请检查后重新提交',
+                  showCancel: false,
                 })
               } else if (res.data == "-4") {
-                wx.navigateTo({
-                  url: '../message/message?message=加班缘由填写有误，请检查后重新提交'
+                wx.showModal({
+                  title: '提示',
+                  content: '加班缘由填写有误，请检查后重新提交',
+                  showCancel: false,
                 })
               } else if (res.data == "-5") {
-                wx.navigateTo({
-                  url: '../message/message?message=加班时长填写有误，请检查后重新提交'
+                wx.showModal({
+                  title: '提示',
+                  content: '加班时长填写有误，请检查后重新提交',
+                  showCancel: false,
                 })
               } else if (res.data == "-6") {
-                wx.navigateTo({
-                  url: '../message/message?message=加班地点填写有误，请检查后重新提交'
+                wx.showModal({
+                  title: '提示',
+                  content: '加班地点填写有误，请检查后重新提交',
+                  showCancel: false,
                 })
               } else if (res.data == "-7") {
-                wx.navigateTo({
-                  url: '../message/message?message=系统异常，提交失败，请确认信息填写正确后重新提交或稍后重试'
+                wx.showModal({
+                  title: '提示',
+                  content: '系统异常，请重试',
+                  showCancel: false,
+                })
+              }else{
+                wx.showModal({
+                  title: '提示',
+                  content: '服务器出小差了，请重试',
+                  showCancel: false,
                 })
               }
             },
             fail:function(res){
-              wx.navigateTo({
-                url: '../message/message?message=系统异常，提交失败，请确认信息填写正确后重新提交或稍后重试'
+              wx.showModal({
+                title: '提示',
+                content: '出错了，请重试',
+                showCancel: false,
               })
             }
           })
@@ -174,7 +196,7 @@ Page({
               console.log(res)
               //发起网络请求
               wx.request({
-                url: 'https://77205014.qcloud.la/zhaoqing1026/onLogin',
+                url: 'https://77205014.qcloud.la/form-1.0.3/onLogin',
                 method: "POST",
                 data: {
                   code: res.code
@@ -197,7 +219,7 @@ Page({
     this.setData({
       date: options.date || util.formatTime(new Date()),
       index:options.nameIndex || 0,
-      userName:options.userName,//姓名
+      userName:options.userName || wx.getStorageSync('userName'),//姓名
       department:options.department || '产品研发中心二部',
       durationIndex:options.durationIndex || 4,
       reason:options.reason || '',

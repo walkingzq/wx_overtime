@@ -1,103 +1,73 @@
-const app = getApp()//获取app实例
-
 //获取与微信号绑定的姓名（本地缓存或者远程数据库，return姓名或者null）
 export function getUserName() {
-  if(wx.getStorageSync("userName")){//如果本地缓存有值，读取并返回
-    return wx.getStorageSync("userName")
-  }else{//否则，从远程服务器获取并存入本地缓存
-    wx.request({
-      url: 'https://77205014.qcloud.la/zhaoqing1026/getName',
-      method: "POST",
-      data: {
-        sessionKey: wx.getStorageSync("sessionKey")//本js文件中sessionKey()函数
-      },
-      success:res=>{
-        if(res.statusCode == 200){
-          console.log("getUserName.js " + res.data)
-          //如果name不为空，存入本地缓存并返回
-          if(res.data != ""){
-            wx.setStorageSync("userName", res.data)
-            return res.data
-          }
-          //否则，返回null
-          return null
-        }
-        console.log("获取用户姓名出错")
-        console.log(res.data)
-      },
-      fail:res=>{
-        console.log("获取用户姓名出错")
-        return null
-      }
-    })
+  console.log('getUserName()开始执行')
+  if (!wx.getStorageSync("userName")){//如果本地缓存中没有userName，从服务器获取姓名信息
+    if (!wx.getStorageSync('sessionKey')){//如果本地缓存中没有sessionKey,从服务器获取sessionKey
+      console.log('本地缓存中没有sessionKey,调用getSessionKey()')
+      getSessionKey()//从服务器获取sessionKey并存入本地缓存
+      console.log('延时1秒开始')
+      setTimeout(getName, 1500)//2秒后执行getName()函数
+      console.log('延时1秒结束')
+    }else{
+      getName()
+    }     
   }
+  console.log('getUserName()结束，内存中userName：' + wx.getStorageSync("userName"))
 }
 
-//获得sessionKey
-function getSessionKey(zq){
-  console.log("调用getSessionKey")
-  wx.checkSession({//检查登录态是否过期
-    success:res=>{//登录态未过期时获取本地sessionKey
-      console.log("getSessionKey wx.checkSesson success")
-      if (null != wx.getStorageSync('sessionKey')) {//如果本地缓存中有值，则直接从缓存中读取并返回
-        console.log("本地缓存中有值")
-        console.log(wx.getStorageSync('sessionKey'))
-        return wx.getStorageSync("sessionKey")
-      } else {//否则，重新登录获取sessionKey并存入本地缓存
-      console.log("本地缓存中没值")
-        wx.login({
+
+/**
+ * @params sessionKey
+ * 设定userName
+ */
+function getName(){
+  wx.request({
+    url: 'https://77205014.qcloud.la/form-1.0.3/getName',
+    method: "POST",
+    data: {
+      sessionKey: wx.getStorageSync("sessionKey")
+    },
+    success: res => {
+      if (res.statusCode == 200) {
+        // console.log("getUserName.js " + res.data)
+        // if (res.data != "") {//如果name不为空，存入本地缓存并返回
+          wx.setStorageSync("userName", res.data)
+        // }
+      }else{
+        console.log("获取用户姓名请求失败")
+        console.log(res)
+      }
+    },
+    fail: res => {
+      console.log("获取用户姓名出错")
+      console.log(res)
+    }
+  })
+}
+
+export function getSessionKey(){//登录并发送code给服务器，获取sessionKey
+  console.log('getSessionKey()开始执行')
+  wx.login({
+    success: res => {
+      if (res.code) {
+        //发起网络请求
+        wx.request({
+          url: 'https://77205014.qcloud.la/form-1.0.3/onLogin',
+          method: "POST",
+          data: {
+            code: res.code
+          },
           success: res => {
-            if (res.code) {
-              //发起网络请求
-              wx.request({
-                url: 'https://77205014.qcloud.la/zhaoqing1026/onLogin',
-                method: "POST",
-                data: {
-                  code: res.code
-                },
-                success: res => {
-                  console.log("onLogin结果")
-                  console.log(res)
-                  if (res.statusCode == 200) {
-                    app.globalData.sessionKey = res.data//设定app.globalData.sessionKey
-                    wx.setStorageSync('sessionKey', res.data)//将sessionKey存入本地缓存
-                    return res.data//返回sessionKey
-                  }
-                }
-              })
-            } else {
-              console.log('获取用户登录态失败！' + res.errMsg)
+            console.log(res)
+            if (res.statusCode == 200) {
+              wx.setStorageSync('sessionKey', res.data)//将sessionKey存入本地缓存
             }
           }
         })
+      } else {
+        console.log('获取用户登录态失败！' + res.errMsg)
       }
-    },
-    fail:res=>{
-      console.log("getSessionKey wx.checkSesson fail")
-      wx.login({
-        success: res => {
-          if (res.code) {
-            //发起网络请求
-            wx.request({
-              url: 'https://77205014.qcloud.la/zhaoqing1026/onLogin',
-              method: "POST",
-              data: {
-                code: res.code
-              },
-              success: res => {
-                if (res.statusCode == 200) {
-                  // app.globalData.sessionKey = res.data//设定app.globalData.sessionKey
-                  wx.setStorageSync('sessionKey', res.data)//将sessionKey存入本地缓存
-                  return res.data//返回sessionKey
-                }
-              }
-            })
-          } else {
-            console.log('获取用户登录态失败！' + res.errMsg)
-          }
-        }
-      })
     }
   })
-  
+  console.log('getSessionKey()执行完毕')
 }

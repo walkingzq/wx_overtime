@@ -10,11 +10,10 @@ const conf = {
     hasEmptyGrid: false,
     showPicker: false,
     hasUserName:false,//是否绑定姓名
-    userName:null,
-    // userName: getUserName(),
+    userName: null,
   },
   onShow:function() {
-    this.setHasUserName();//设定hasUserName变量
+    this.setHasUserName();//设定hasUserNam变量
     const date = new Date();
     const cur_year = date.getFullYear();
     const cur_month = date.getMonth() + 1;
@@ -36,26 +35,12 @@ const conf = {
   //设置hasName变量
   setHasUserName(){
     console.log("calendar.js1:" + this.data.userName)
-    if (this.data.userName != null) {
+    if (wx.getStorageSync("userName") && wx.getStorageSync("userName") != ""){
       this.setData({
+        userName: wx.getStorageSync("userName"),
         hasUserName: true
       })
     }
-
-    // console.log("calendar.js1:" + wx.getStorageSync('userName'))
-    // if (wx.getStorageSync('userName')) {
-    //   this.setData({
-    //     userName: wx.getStorageSync('userName'),
-    //     hasUserName: true
-    //   })
-    //   console.log("calendar.js2" + wx.getStorageSync('userName'))
-    // } else if (null != getUserName(wx.getStorageSync('sessionKey'))) {
-    //   console.log("calendar.js" + " else if")
-    //   this.setData({
-    //     userName: getUserName(wx.getStorageSync('sessionKey')),
-    //     hasUserName: true
-    //   })
-    // }
   },
   //显示在当前页面的上月天数
   calculateEmptyGrids(year, month) {
