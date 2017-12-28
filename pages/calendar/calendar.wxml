@@ -37,4 +37,10 @@
 		</picker-view-column>
 	</picker-view>
 </view>
+<!-- 从服务器拉取本微信号提交的当月加班信息 -->
+<view class="button">
+        <button bindtap='download' type='primary'>加载加班信息</button>
+</view>
+
+
 

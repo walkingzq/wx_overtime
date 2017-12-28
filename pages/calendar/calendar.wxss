@@ -280,3 +280,13 @@ page {
 .fs36 {
   font-size: 36rpx;
 }
+.button{
+  /* margin-top: 10px;
+  margin-left: 0px;
+  margin-right: 10px;
+  height: 50px; */
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;  
+  padding: 200rpx 0;
+}

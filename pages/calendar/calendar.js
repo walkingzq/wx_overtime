@@ -12,6 +12,33 @@ const conf = {
     hasUserName:false,//是否绑定姓名
     userName: null,
   },
+  //加载按钮动作：从服务器加载数据到本地
+  download:function(e) {
+    const date1 = new Date();
+    const cur_year = date1.getFullYear();
+    const cur_month = date1.getMonth() + 1;
+    const cur_day = date1.getDate();
+    const date = cur_year + "-" + cur_month + "-" + cur_day;
+    var that = this;
+    wx.request({
+      url: 'https://77205014.qcloud.la/form-1.0.3/download?date=' + date,
+      method: "GET",
+      header: {
+        'Session-Key':wx.getStorageSync("sessionKey")
+      },
+      success: function (res) {
+        console.log(res.data)
+        
+        var records = res.data;
+        for(var i=0;i<records.length;i++){
+          console.log(records[i].date)
+          records[i].duration = records[i].duration / 0.5 - 1;
+          wx.setStorageSync(records[i].date, JSON.stringify(records[i]));
+          that.calculateDays(cur_year, cur_month);
+        }
+      }
+    })
+  },
   onShow:function() {
     this.setHasUserName();//设定hasUserNam变量
     const date = new Date();
@@ -61,12 +88,28 @@ const conf = {
       });
     }
   },
+  //清除某年某月的本地缓存
+  deleteStorage(year, month){
+    const days = this.data.days;
+
+    // 如果日期为1-9日，则在日期前加一个0
+    var d = parseInt(idx) + 1;
+    if (d < 10) {
+      var d = "0" + d;
+    }
+
+    //如果月份为1-9月，则在月份前加一个0
+    var value = this.data.cur_year + '-' + this.data.cur_month + '-' + d;
+    if (parseInt(this.data.cur_month) < 10) {
+      value = this.data.cur_year + '-0' + this.data.cur_month + '-' + d;
+    }
+
+    if()
+  },
   //设置本月天数的有值状态
   calculateDays(year, month) {
     let days = [];
-    
     const thisMonthDays = this.getThisMonthDays(year, month);
-    
     for (let i = 1; i <= thisMonthDays; i++) {
       //组装本地缓存key值
       // 如果日期为1-9日，则在日期前加一个0
@@ -148,7 +191,6 @@ const conf = {
     const idx = e.currentTarget.dataset.idx;
     const days = this.data.days;
 
-
     // 如果日期为1-9日，则在日期前加一个0
     var d = parseInt(idx) + 1;
     if (d < 10) {
@@ -164,7 +206,8 @@ const conf = {
     if(days[idx].choosed){
       if(this.data.hasUserName){
         wx.navigateTo({
-          url: '../detailShow/detailShow?date=' + value + "&userName=" + this.data.userName,
+          url: '../detailShow/detailShow?date=' + value,
+          // + "&userName=" + this.data.userName,
         })
       }else{
         wx.showModal({
