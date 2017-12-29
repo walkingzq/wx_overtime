@@ -55,6 +55,55 @@ Page({
       + "&date=" + this.data.date ,
     })
   },
+  deleteRecord:function(event){
+    console.log(event.currentTarget.dataset.date)
+    var day = event.currentTarget.dataset.date;
+    wx.request({
+      url: 'https://77205014.qcloud.la/form-1.0.3/deleteRecord?date=' + day,
+      method: "GET",
+      header: {
+        'Session-Key': wx.getStorageSync("sessionKey")
+      },
+      success: function (res) {//微信提供的wx.request()接口调用成功
+        console.log(res)
+        if(res.data == "0"){//服务器返回0，表示该条记录在数据库中成功删除
+          wx.showToast({
+            title: '已删除本条记录',
+            icon:'success',
+          })
+          try{//删除本地缓存
+            wx.removeStorageSync(day)
+          }catch (exc){
+            wx.showModal({
+              title: '提示',
+              content: '删除本地缓存失败，请手动同步信息',
+            })
+          }
+          wx.switchTab({//返回主页
+            url: '../calendar/calendar',
+          })
+        }else if(res.data == "1"){//服务器返回1，表示该条记录在数据库中删除失败
+          wx.showModal({
+            title: '提示',
+            content: '删除失败,请重试',
+          })
+        }else{//服务器返回结果只有0和1两个取值，其他取值均为服务器异常
+          wx.showModal({
+            title: '提示',
+            content: '服务器出小差了，请稍后重试',
+          })
+        }
+      },
+      fail:function(){//微信提供的wx.request()接口调用失败
+        wx.showModal({
+          title: '提示',
+          content: '出错了，请重试',
+          showCancel: false,
+        })
+      }
+    })
+    // wx.removeStorageSync(event.currentTarget.dataset.date)
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

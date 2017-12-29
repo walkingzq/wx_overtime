@@ -14,11 +14,24 @@ const conf = {
   },
   //加载按钮动作：从服务器加载数据到本地
   download:function(e) {
+    wx.showLoading({//显示加载动画
+      title: '正在加载ing...',
+    })
     const date1 = new Date();
-    const cur_year = date1.getFullYear();
-    const cur_month = date1.getMonth() + 1;
-    const cur_day = date1.getDate();
+    var cur_year = this.data.cur_year;
+    var cur_month = this.data.cur_month;
+    var cur_day = date1.getDate();
+
+    //日期修改
+    if(cur_day < 10){
+      cur_day = "0" + cur_day;
+    }
+    //月份修改
+    if(cur_month < 10){
+      cur_month = "0" + cur_month;
+    }
     const date = cur_year + "-" + cur_month + "-" + cur_day;
+    this.deleteStorage(cur_year, cur_month);//清除该月本地缓存，防止出现与数据库记录不一致的情况（本地缓存有而数据库没有）
     var that = this;
     wx.request({
       url: 'https://77205014.qcloud.la/form-1.0.3/download?date=' + date,
@@ -26,17 +39,30 @@ const conf = {
       header: {
         'Session-Key':wx.getStorageSync("sessionKey")
       },
-      success: function (res) {
-        console.log(res.data)
-        
-        var records = res.data;
-        for(var i=0;i<records.length;i++){
-          console.log(records[i].date)
-          records[i].duration = records[i].duration / 0.5 - 1;
-          wx.setStorageSync(records[i].date, JSON.stringify(records[i]));
-          that.calculateDays(cur_year, cur_month);
+      success: function (res) {//成功调用接口
+        console.log(res)
+        if(res.statusCode == "200"){//服务器成功相应
+          var records = res.data;
+          for(var i=0;i<records.length;i++){
+            console.log(records[i].date)
+            records[i].duration = records[i].duration / 0.5 - 1;
+            wx.setStorageSync(records[i].date, JSON.stringify(records[i]));
+            that.calculateDays(cur_year, cur_month);
+          }
+          wx.hideLoading();//关闭加载动画
+          wx.showToast({//加载成功动画
+            title: '加载成功',
+            icon: 'success',
+            duration: 2000
+          })
         }
       }
+    })
+  },
+  //跳转按钮动作：跳转至月总览页面
+  goToMonthOverView:function(e){
+    wx.navigateTo({
+      url: '../monthOverView/monthOverView?year=' + this.data.cur_year + "&month=" + this.data.cur_month,
     })
   },
   onShow:function() {
@@ -89,22 +115,33 @@ const conf = {
     }
   },
   //清除某年某月的本地缓存
+  //传入month:必须是两位数，ie.09,12
   deleteStorage(year, month){
-    const days = this.data.days;
-
-    // 如果日期为1-9日，则在日期前加一个0
-    var d = parseInt(idx) + 1;
-    if (d < 10) {
-      var d = "0" + d;
+    for (var i = 0; i < 10; i++) {
+      var key = year + "-" + month + "-0" + i;
+      try {
+        wx.removeStorageSync(key)
+      } catch (e) {
+        wx.showModal({
+          title: '提示',
+          content: '清除' + month + '月缓存失败，请重试',
+          showCancel:false,
+        })
+      }
     }
-
-    //如果月份为1-9月，则在月份前加一个0
-    var value = this.data.cur_year + '-' + this.data.cur_month + '-' + d;
-    if (parseInt(this.data.cur_month) < 10) {
-      value = this.data.cur_year + '-0' + this.data.cur_month + '-' + d;
+    for (var i = 10; i < 32; i++) {
+      var key = year + "-" + month + "-" + i;
+      try {
+        wx.removeStorageSync(key)
+      } catch (e) {
+        wx.showModal({
+          title: '提示',
+          content: '清除' + month + '月缓存失败，请重试',
+          showCancel: false,
+        })
+      }
     }
-
-    if()
+    console.debug('清除' + month + '月缓存成功')
   },
   //设置本月天数的有值状态
   calculateDays(year, month) {

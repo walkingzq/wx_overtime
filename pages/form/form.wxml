@@ -4,10 +4,7 @@
   <form bindsubmit="formSubmit" bindreset="formReset">
   <view class='itemView'>
       <picker mode="date" name='date' value="{{date}}" start="2015-09-01" end="9999-09-01" bindchange="bindDateChange">
-             <!-- <view class="input">     -->
             加班日期: {{date}}
-             <!-- </view>        -->
-          <!-- <input class='input' name="name" placeholder="请输入姓名" /> -->
       </picker>
       </view>
 
@@ -18,14 +15,6 @@
       <view class='itemView'>姓名：
       <input class='input' name="name" value='{{userName}}' disabled='true'/>
       </view> 
-
-      <!-- <view class='itemView'>
-        <picker bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
-          <view class="picker">
-            姓名：{{names[index]}}
-          </view>
-        </picker>
-      </view> -->
 
       <view class='itemView'>加班缘由：
       <input class='input' name="reason" placeholder="请输入加班缘由" value="{{reason}}" maxlength='200'/>
@@ -43,15 +32,9 @@
       <input class='input' name="place" value='{{place}}' placeholder="请输入加班地点" maxlength='200'/>
       </view> 
 
-      <!-- <checkbox-group bindchange="checkboxChange">
-        <label class="checkbox" wx:for="{{items}}">
-          <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
-        </label>
-      </checkbox-group> -->
-
       <view class="button">
         <button formType="submit" type='primary'>提交</button>
-        <button formType="reset">清空</button>
+        <!-- <button formType="reset">清空</button> -->
       </view>
   </form>
 </view>

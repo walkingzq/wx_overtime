@@ -4,7 +4,8 @@
     "pages/form/form",
     "pages/message/message",
     "pages/calendar/calendar",
-    "pages/detailShow/detailShow"
+    "pages/detailShow/detailShow",
+    "pages/monthOverView/monthOverView"
   ],
   "window": {
     "backgroundTextStyle": "light",

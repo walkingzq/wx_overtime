@@ -11,7 +11,9 @@
 
       <view class="button">
         <button bindtap='goToForm' type='primary'>修改</button>
+        <button bindtap='deleteRecord' data-date='{{date}}' type='warn'>删除</button>
       </view>
+
     </form>  
 </view>
 

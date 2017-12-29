@@ -288,5 +288,5 @@ page {
   justify-content: flex-start;
   display: flex;
   align-items: center;  
-  padding: 200rpx 0;
+  padding: 50rpx 0;
 }

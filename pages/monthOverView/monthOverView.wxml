@@ -1,0 +1,29 @@
+<!--pages/monthOverView/monthOverView.wxml-->
+<view class="table">
+  <view class="tr bg-w">
+    <view class="th">部门</view>
+    <view class="th">姓名</view>
+    <view class="th ">加班日期</view>
+    <view class="th ">加班缘由</view>
+    <view class="th">加班时长</view>
+    <view class="th">加班地点</view>
+  </view>
+  <block wx:for="{{records}}" wx:key="{{date}}">
+    <view class="tr bg-g" bindtap='goToDetailShow' data-date="{{item.date}}" wx:if="{{index % 2 == 0}}">
+      <view class="td">{{item.department}}</view>
+      <view class="td">{{item.name}}</view>
+      <view class="td">{{item.date}}</view>
+      <view class="td">{{item.reason}}</view>
+      <view class="td">{{durations[item.duration]}}小时</view>
+      <view class="td">{{item.place}}</view>
+    </view>
+    <view class="tr" bindtap='goToDetailShow' data-date="{{item.date}}" wx:else>
+      <view class="td">{{item.department}}</view>
+      <view class="td">{{item.name}}</view>
+      <view class="td">{{item.date}}</view>
+      <view class="td">{{item.reason}}</view>
+      <view class="td">{{durations[item.duration]}}小时</view>
+      <view class="td">{{item.place}}</view>
+    </view>
+  </block>
+</view>

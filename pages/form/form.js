@@ -17,17 +17,6 @@ Page({
     '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '11', '12', '12.5', '13', '13.5', '14', '14.5', '15', '15.5', '16', '16.5', '17', '17.5', '18', '18.5', '19', '19.5', '20', '20.5', '21', '21.5', '22', '23', '23.5'],
     durationIndex:4,
     place:'公司',
-  //   items: [
-  //     { name: 'USA', value: '美国' },
-  //     { name: 'CHN', value: '中国', checked: 'true' },
-  //     { name: 'BRA', value: '巴西' },
-  //     { name: 'JPN', value: '日本' },
-  //     { name: 'ENG', value: '英国' },
-  //     { name: 'TUR', value: '法国' },
-  //   ]
-  // },
-  // checkboxChange: function (e) {
-  //   console.log('checkbox发生change事件，携带value值为：', e.detail.value)
   },
   //加班日期
   bindDateChange: function (e) {
@@ -153,7 +142,7 @@ Page({
                 })
               }
             },
-            fail:function(res){
+            fail:function(res){//接口调用失败
               wx.showModal({
                 title: '提示',
                 content: '出错了，请重试',
@@ -167,13 +156,13 @@ Page({
       }
     });  
   },
-  formReset: function () {
-    console.log('form发生了reset事件')
-    this.setData({
-      date: util.formatTime(new Date()),
-      index:0
-    })
-  },
+  // formReset: function () {
+  //   console.log('form发生了reset事件')
+  //   this.setData({
+  //     date: util.formatTime(new Date()),
+  //     index:0,
+  //   })
+  // },
   /**
    * 生命周期函数--监听页面加载
    */
