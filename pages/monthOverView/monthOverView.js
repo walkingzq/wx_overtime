@@ -30,7 +30,7 @@ Page({
     var j = 0;
     for (var i = 0; i < 10; i++) {
       var key = year + "-" + month + "-0" + i;
-      console.log("key:" + key)
+      // console.log("key:" + key)
       try {
        var value = wx.getStorageSync(key);
        if(value){

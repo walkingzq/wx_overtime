@@ -41,14 +41,16 @@ const conf = {
       },
       success: function (res) {//成功调用接口
         console.log(res)
-        if(res.statusCode == "200"){//服务器成功相应
+        if(res.statusCode == "200"){//服务器成功响应
           var records = res.data;
           for(var i=0;i<records.length;i++){
             console.log(records[i].date)
             records[i].duration = records[i].duration / 0.5 - 1;
             wx.setStorageSync(records[i].date, JSON.stringify(records[i]));
-            that.calculateDays(cur_year, cur_month);
+            // setTimeout(that.calculateDays(cur_year, cur_month), 100)
+            // that.calculateDays(cur_year, cur_month);
           }
+          that.calculateDays(cur_year, cur_month);
           wx.hideLoading();//关闭加载动画
           wx.showToast({//加载成功动画
             title: '加载成功',
@@ -145,6 +147,7 @@ const conf = {
   },
   //设置本月天数的有值状态
   calculateDays(year, month) {
+    console.log("刷新日期状态")
     let days = [];
     const thisMonthDays = this.getThisMonthDays(year, month);
     for (let i = 1; i <= thisMonthDays; i++) {
@@ -157,16 +160,17 @@ const conf = {
       }
       // 如果月份为1-9月，则在月份前加一个0并组装key值
       var key = year + '-' + month + '-' + d;
+      // console.debug(parseInt(month))
       if (parseInt(month) < 10) {
-        key = year + '-0' + month + '-' + d;
+        key = year + '-0' + parseInt(month) + '-' + d;
       }
 
       //查询本地缓存，若有值，则将该日期的choosed设定为true；否则，设为false
       try{
         var value = wx.getStorageSync(key);
-        console.log(value);
+        console.log(key);
         if (value) {
-          console.log("success" + key)
+          console.debug(key + "有值")
           days.push({
             day: i,
             choosed: true
@@ -185,6 +189,7 @@ const conf = {
     this.setData({
       days
     });
+    // console.debug(days)
   },
   handleCalendar(e) {
     const handle = e.currentTarget.dataset.handle;

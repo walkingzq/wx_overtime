@@ -14,12 +14,60 @@ Page({
     hasUserName:false,//姓名是否绑定标志
     userName: null,
     sessionKey:wx.getStorageSync('sessionKey') || null,
+    showModalStatus: false
   },
-  // 事件处理函数
-  bindViewTap: function() {
-    wx.redirectTo({
-      url: '../calendar/calendar'
+//动画
+  powerDrawer: function (e) {
+    var currentStatu = e.currentTarget.dataset.statu;
+    this.util(currentStatu)
+  },
+  util: function (currentStatu) {
+    /* 动画部分 */
+    // 第1步：创建动画实例 
+    var animation = wx.createAnimation({
+      duration: 200, //动画时长 
+      timingFunction: "linear", //线性 
+      delay: 0 //0则不延迟 
+    });
+
+    // 第2步：这个动画实例赋给当前的动画实例 
+    this.animation = animation;
+
+    // 第3步：执行第一组动画 
+    animation.opacity(0).rotateX(-100).step();
+
+    // 第4步：导出动画对象赋给数据对象储存 
+    this.setData({
+      animationData: animation.export()
     })
+
+    // 第5步：设置定时器到指定时候后，执行第二组动画 
+    setTimeout(function () {
+      // 执行第二组动画 
+      animation.opacity(1).rotateX(0).step();
+      // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象 
+      this.setData({
+        animationData: animation
+      })
+
+      //关闭 
+      if (currentStatu == "close") {
+        this.setData(
+          {
+            showModalStatus: false
+          }
+        );
+      }
+    }.bind(this), 200)
+
+    // 显示 
+    if (currentStatu == "open") {
+      this.setData(
+        {
+          showModalStatus: true
+        }
+      );
+    }
   },
   onLoad: function () {
     if (app.globalData.userInfo) {
@@ -95,12 +143,17 @@ Page({
   },
   //姓名
   bindNameChange: function (e) {
-    console.log('name changes,name is ', this.data.names[e.detail.value])
+    console.log(e.detail.value.newName)
+    var currentStatu = e.detail.target.dataset.statu;
+    this.util(currentStatu)
+
+    var newName = e.detail.value.newName
+    console.log('name changes,name is ', e.detail.value)
     wx.request({
       url: 'https://77205014.qcloud.la/form-1.0.3/setName',
       method: "POST",
       data: {
-        name: this.data.names[e.detail.value],
+        name: e.detail.value,
         localSessionKey: wx.getStorageSync('sessionKey')
       },
       header: {
@@ -115,10 +168,10 @@ Page({
               title: '绑定成功',
               icon:'success'
             })
-            wx.setStorageSync('userName', this.data.names[e.detail.value])//存入本地缓存
+            wx.setStorageSync('userName', e.detail.value)//存入本地缓存
             this.setData({
               hasUserName:true,
-              userName: this.data.names[e.detail.value],
+              userName: e.detail.value,
             })
           }else{
             console.log("系统异常")
@@ -142,18 +195,41 @@ Page({
       }
     })
   },
-  //姓名修改
-  bindNameModify:function(e){
+  nameChange:function(){
     wx.showModal({
       title: '提示',
-      content: '确定要修改您绑定的姓名吗？',
+      content: '确定要修改姓名吗？',
+      success:res=>{
+        if(res.confirm){
+          this.setData({
+            nameChange:true
+          })
+          console.log(this.data.nameChange)
+        }
+      }
+    })
+    console.log(this.data.nameChange)
+  },
+  notChangeName:function(){
+    this.setData({
+      nameChange: false
+    })
+  },
+  //姓名修改
+  bindNameModify:function(e){
+    var currentStatu = e.detail.target.dataset.statu;
+    this.util(currentStatu)
+    var newName = e.detail.value.newName
+    wx.showModal({
+      title: '提示',
+      content: '确定要设置或修改您的绑定姓名吗？',
       success:res=>{
         if(res.confirm){
           wx.request({
             url: 'https://77205014.qcloud.la/form-1.0.3/modifyName',
             method: "POST",
             data: {
-              name: this.data.names[e.detail.value],
+              name: newName,
               localSessionKey: this.data.sessionKey
             },
             header: {
@@ -163,15 +239,15 @@ Page({
               console.log(res)
               if (res.statusCode == 200) {
                 if (res.data == 0) {
-                  console.log("修改姓名成功")
+                  // console.log("修改姓名成功")
                   wx.showToast({
-                    title: '修改姓名成功',
+                    title: '姓名设置成功',
                     icon: 'success'
                   })
-                  wx.setStorageSync('userName', this.data.names[e.detail.value])//存入本地缓存
+                  wx.setStorageSync('userName', newName)//存入本地缓存
                   this.setData({
                     hasUserName: true,
-                    userName: this.data.names[e.detail.value],
+                    userName: newName,
                   })
                 } else {
                   console.log("系统异常")

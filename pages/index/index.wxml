@@ -9,21 +9,38 @@
         
           <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text>     -->
     </block>
-    <picker wx:if="{{!hasUserName}}" bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
+    <!-- <picker wx:if="{{!hasUserName}}" bindchange="bindNameChange" name="name" value="{{index}}" range="{{names}}">
           <view class="picker">
             请绑定姓名：{{names[index]}}
           </view>
         </picker>
-       <!-- <text wx:else>{{userName}}</text> -->
-       <picker wx:else bindchange='bindNameModify' value='{{index}}' range='{{names}}'>{{userName}}</picker>
-  </view>
-  <view>
-    
-  </view>
-
-<!--跳转至form页面-->
-  <!-- <view class="button">
-    <button bindtap='goToForm' type='primary'>提交加班信息</button>
+       <picker wx:else bindchange='bindNameModify' value='{{index}}' range='{{names}}'>{{userName}}</picker> -->
+       <text wx:if="{{hasUserName}}" bindtap='powerDrawer' data-statu="open">{{userName}}</text>
+       <text wx:else bindtap='powerDrawer' data-statu="open">请设置您的姓名</text>
+       </view>
+       <!-- <block wx:if="{{!nameChange}}">
+          <text wx:if="{{hasUserName}}" bindtap='nameChange'>{{userName}}</text>
+          <input wx:else bindconfirm='bindNameChange' placeholder="请设置姓名" maxlength='4'></input>
+        </block>
+       <input wx:if="{{nameChange}}" name='name' bindconfirm='bindNameModify' bindblur='notChangeName' placeholder="请输入姓名" maxlength='4'></input>
   </view> -->
+
+<!--mask-->
+<view class="drawer_screen" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}"></view> 
+
+<!--使用animation属性指定需要执行的动画-->
+<view animation="{{animationData}}" class="drawer_box" wx:if="{{showModalStatus}}"> 
+  
+ <!--drawer content-->
+ <view class="drawer_title">姓名设置</view> 
+  <form bindsubmit="bindNameModify">
+    <view class='drawer_content'>
+        <view class='top grid'>
+        <input class="input_base input_h30 col-1" name="newName" placeholder='请输入您的姓名'/>
+        </view> 
+        <button class="btn_ok" formType="submit" data-statu="close" >确定</button>
+    </view>
+  </form>
+</view>
   
 </view>
